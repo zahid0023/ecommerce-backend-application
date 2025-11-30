@@ -2,8 +2,10 @@ package org.example.ecommercebackendapplication.controller.shopowner;
 
 import org.example.ecommercebackendapplication.dto.request.shop.ShopCreateRequest;
 import org.example.ecommercebackendapplication.model.entity.ShopOwnerEntity;
+import org.example.ecommercebackendapplication.model.entity.UserEntity;
 import org.example.ecommercebackendapplication.service.ShopService;
 import org.example.ecommercebackendapplication.service.UserService;
+import org.example.ecommercebackendapplication.utils.AuthContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,13 +25,13 @@ public class ShopController {
     @PostMapping("/shops")
     public ResponseEntity<?> createShop(@RequestBody ShopCreateRequest shopCreateRequest) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        ShopOwnerEntity shopOwnerEntity = new ShopOwnerEntity();
-        return ResponseEntity.status(HttpStatus.CREATED).body(shopService.createShop(shopCreateRequest, shopOwnerEntity));
+        UserEntity userEntity = userService.getUserByUsername(userName);
+        return ResponseEntity.status(HttpStatus.CREATED).body(shopService.createShop(shopCreateRequest, userEntity));
     }
 
     @GetMapping("/shops")
     public ResponseEntity<?> getAllShops() {
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        String userName = AuthContext.getUsername();
         ShopOwnerEntity shopOwnerEntity = new ShopOwnerEntity();
         return ResponseEntity.ok(shopService.getAllShops(shopOwnerEntity));
     }

@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -43,5 +44,11 @@ public class UserServiceImpl implements UserService {
                 userEntity.getPassword(),
                 List.of()
         );
+    }
+
+    @Override
+    public UserEntity getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 }

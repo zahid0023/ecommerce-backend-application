@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
@@ -26,5 +29,8 @@ public class UserEntity {
     @NotNull
     @Column(name = "password", nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "ownerEntity")
+    private Set<ShopOwnerEntity> shopOwners = new LinkedHashSet<>();
 
 }

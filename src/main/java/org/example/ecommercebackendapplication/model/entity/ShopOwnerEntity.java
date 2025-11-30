@@ -2,15 +2,21 @@ package org.example.ecommercebackendapplication.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.ecommercebackendapplication.dto.request.auth.RegistrationRequest;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "shop_owners")
+@Table(
+        name = "shop_owners",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"shop_id", "owner_id"})
+        }
+)
 public class ShopOwnerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,17 +24,19 @@ public class ShopOwnerEntity {
     private Long id;
 
     @NotNull
-    @Column(name = "username", nullable = false, length = 100)
-    private String username;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "shop_id", nullable = false)
+    private ShopEntity shopEntity;
 
     @NotNull
-    @Column(name = "password", nullable = false)
-    private String password;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private UserEntity ownerEntity;
 
-    public static ShopOwnerEntity fromRequest(RegistrationRequest request, PasswordEncoder passwordEncoder) {
-        ShopOwnerEntity entity = new ShopOwnerEntity();
-        entity.setUsername(request.getUserName());
-        entity.setPassword(passwordEncoder.encode(request.getPassword()));
-        return entity;
-    }
+    @Size(max = 100)
+    @NotNull
+    @Column(name = "role", nullable = false, length = 100)
+    private String role;
 }

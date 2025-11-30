@@ -10,7 +10,10 @@ import org.example.ecommercebackendapplication.dto.response.shop.ShopResponse;
 import org.example.ecommercebackendapplication.model.dto.shop.ShopDTO;
 import org.example.ecommercebackendapplication.model.entity.ShopEntity;
 import org.example.ecommercebackendapplication.model.entity.ShopOwnerEntity;
+import org.example.ecommercebackendapplication.model.entity.UserEntity;
 import org.example.ecommercebackendapplication.model.mapper.shop.ShopMapper;
+import org.example.ecommercebackendapplication.model.mapper.shop.ShopOwnerMapper;
+import org.example.ecommercebackendapplication.repository.ShopOwnerRepository;
 import org.example.ecommercebackendapplication.repository.ShopRepository;
 import org.example.ecommercebackendapplication.service.ShopService;
 import org.springframework.stereotype.Service;
@@ -21,23 +24,29 @@ import java.util.List;
 @Slf4j
 public class ShopServiceImpl implements ShopService {
     private final ShopRepository shopRepository;
+    private final ShopOwnerRepository shopOwnerRepository;
 
-    public ShopServiceImpl(ShopRepository shopRepository) {
+    public ShopServiceImpl(ShopRepository shopRepository, ShopOwnerRepository shopOwnerRepository) {
         this.shopRepository = shopRepository;
+        this.shopOwnerRepository = shopOwnerRepository;
     }
 
     @Override
     @Transactional
-    public ShopCreateResponse createShop(ShopCreateRequest shopCreateRequest, ShopOwnerEntity shopOwnerEntity) {
-        ShopEntity shopEntity = ShopMapper.fromRequest(shopCreateRequest, shopOwnerEntity);
+    public ShopCreateResponse createShop(ShopCreateRequest shopCreateRequest, UserEntity userEntity) {
+        ShopEntity shopEntity = ShopMapper.fromRequest(shopCreateRequest);
         shopEntity = shopRepository.save(shopEntity);
+
+        ShopOwnerEntity shopOwnerEntity = ShopOwnerMapper.fromRequest(userEntity, shopEntity, "SHOP_OWNER");
+        shopOwnerRepository.save(shopOwnerEntity);
+
         ShopDTO shopDTO = ShopMapper.toDTO(shopEntity);
         return new ShopCreateResponse(shopDTO);
     }
 
     @Override
     public AllShopsResponse getAllShops(ShopOwnerEntity shopOwnerEntity) {
-        List<ShopEntity> shopEntities = shopRepository.findAllByShopOwnerEntity(shopOwnerEntity);
+        List<ShopEntity> shopEntities = List.of();
         List<ShopDTO> shopDTOList = shopEntities.stream()
                 .map(ShopMapper::toDTO)
                 .toList();

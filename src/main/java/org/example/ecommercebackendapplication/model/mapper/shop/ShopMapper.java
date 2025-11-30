@@ -4,13 +4,11 @@ import lombok.experimental.UtilityClass;
 import org.example.ecommercebackendapplication.dto.request.shop.ShopCreateRequest;
 import org.example.ecommercebackendapplication.model.dto.shop.ShopDTO;
 import org.example.ecommercebackendapplication.model.entity.ShopEntity;
-import org.example.ecommercebackendapplication.model.entity.ShopOwnerEntity;
 
 @UtilityClass
 public class ShopMapper {
-    public static ShopEntity fromRequest(ShopCreateRequest request, ShopOwnerEntity merchant) {
+    public static ShopEntity fromRequest(ShopCreateRequest request) {
         ShopEntity entity = new ShopEntity();
-        entity.setShopOwnerEntity(merchant);
         entity.setShopName(request.getShopName());
         entity.setShopSlug(request.getShopSlug());
         entity.setDescription(request.getDescription());

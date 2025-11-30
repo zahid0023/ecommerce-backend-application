@@ -5,9 +5,10 @@ import org.example.ecommercebackendapplication.dto.response.shop.AllShopsRespons
 import org.example.ecommercebackendapplication.dto.response.shop.ShopCreateResponse;
 import org.example.ecommercebackendapplication.dto.response.shop.ShopResponse;
 import org.example.ecommercebackendapplication.model.entity.ShopOwnerEntity;
+import org.example.ecommercebackendapplication.model.entity.UserEntity;
 
 public interface ShopService {
-    ShopCreateResponse createShop(ShopCreateRequest shopCreateRequest, ShopOwnerEntity shopOwnerEntity);
+    ShopCreateResponse createShop(ShopCreateRequest shopCreateRequest, UserEntity userEntity);
 
     AllShopsResponse getAllShops(ShopOwnerEntity shopOwnerEntity);
 

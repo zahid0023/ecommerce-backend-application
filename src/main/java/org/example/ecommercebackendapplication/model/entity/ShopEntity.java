@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
@@ -17,11 +20,6 @@ public class ShopEntity {
     @SequenceGenerator(name = "shops_id_gen", sequenceName = "shops_id_seq", allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Long id;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "merchant_id", nullable = false)
-    private ShopOwnerEntity shopOwnerEntity;
 
     @Size(max = 150)
     @NotNull
@@ -44,4 +42,8 @@ public class ShopEntity {
     @ColumnDefault("false")
     @Column(name = "is_active")
     private Boolean isActive;
+
+    @OneToMany(mappedBy = "shopEntity")
+    private Set<ShopOwnerEntity> shopOwners = new LinkedHashSet<>();
+
 }
