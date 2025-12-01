@@ -6,7 +6,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -27,7 +28,7 @@ public class ShopCategoryEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "shop_id", nullable = false)
-    private ShopEntity shop;
+    private ShopEntity shopEntity;
 
     @Size(max = 100)
     @NotNull
@@ -39,4 +40,15 @@ public class ShopCategoryEntity {
 
     @Column(name = "logo_url", length = Integer.MAX_VALUE)
     private String logoUrl;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "parent_id")
+    private ShopCategoryEntity parentEntity;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "platform_category_id", nullable = false)
+    private PlatformCategoryEntity platformCategoryEntity;
+
 }
