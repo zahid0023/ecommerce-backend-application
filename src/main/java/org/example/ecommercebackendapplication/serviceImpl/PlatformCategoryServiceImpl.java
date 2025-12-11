@@ -66,8 +66,8 @@ public class PlatformCategoryServiceImpl implements PlatformCategoryService {
     }
 
     @Override
-    public PlatformCategoryResponse getPlatformCategory(Long id) {
-        PlatformCategoryEntity platformCategoryEntity = getPlatformCategoryEntity(id);
+    public PlatformCategoryResponse getPlatformCategoryNested(Long platformCategoryId) {
+        PlatformCategoryEntity platformCategoryEntity = getPlatformCategoryEntity(platformCategoryId);
         PlatformCategoryDTO platformCategoryDTO = PlatformCategoryMapper.fromEntityRecursive(platformCategoryEntity);
         return new PlatformCategoryResponse(platformCategoryDTO);
     }

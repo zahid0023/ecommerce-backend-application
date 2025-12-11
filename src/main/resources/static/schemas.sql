@@ -1,21 +1,3 @@
-CREATE TABLE shop_owners
-(
-    id       BIGSERIAL PRIMARY KEY,
-    username VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
-);
-
-
-
-CREATE TABLE shop_categories
-(
-    id          BIGSERIAL PRIMARY KEY,
-    shop_id     BIGINT REFERENCES shops (id),
-    name        VARCHAR(100) NOT NULL,
-    description text,
-    logoUrl     text
-);
-
 CREATE TABLE users
 (
     id       BIGSERIAL PRIMARY KEY,
@@ -51,4 +33,17 @@ CREATE TABLE shop_owners
 
     CONSTRAINT unique_owner_per_shop
         UNIQUE (shop_id, owner_id)
+);
+
+CREATE TABLE products
+(
+    id                BIGSERIAL PRIMARY KEY,
+    shop_id           BIGINT       NOT NULL REFERENCES shops (id),
+    category_id       BIGINT       NOT NULL REFERENCES shop_categories (id),
+    name              VARCHAR(255) NOT NULL,
+    highlights        TEXT,
+    base_price        DECIMAL(10, 2),
+    selling_price     DECIMAL(10, 2),
+    number_of_stars   INTEGER      NOT NULL DEFAULT 0,
+    number_of_reviews INTEGER      NOT NULL DEFAULT 0
 );

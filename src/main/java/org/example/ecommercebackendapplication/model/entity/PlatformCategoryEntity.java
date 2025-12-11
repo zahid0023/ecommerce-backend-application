@@ -42,4 +42,7 @@ public class PlatformCategoryEntity {
     @Column(name = "logo_url", nullable = false, length = Integer.MAX_VALUE)
     private String logoUrl;
 
+    @OneToMany(mappedBy = "platformCategoryEntity")
+    private Set<ShopCategoryEntity> shopCategories = new LinkedHashSet<>();
+
 }

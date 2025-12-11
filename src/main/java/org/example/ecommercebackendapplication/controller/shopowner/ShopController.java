@@ -1,7 +1,6 @@
 package org.example.ecommercebackendapplication.controller.shopowner;
 
 import org.example.ecommercebackendapplication.dto.request.shop.ShopCreateRequest;
-import org.example.ecommercebackendapplication.model.entity.ShopOwnerEntity;
 import org.example.ecommercebackendapplication.model.entity.UserEntity;
 import org.example.ecommercebackendapplication.service.ShopService;
 import org.example.ecommercebackendapplication.service.UserService;
@@ -32,8 +31,8 @@ public class ShopController {
     @GetMapping("/shops")
     public ResponseEntity<?> getAllShops() {
         String userName = AuthContext.getUsername();
-        ShopOwnerEntity shopOwnerEntity = new ShopOwnerEntity();
-        return ResponseEntity.ok(shopService.getAllShops(shopOwnerEntity));
+        UserEntity userEntity = userService.getUserByUsername(userName);
+        return ResponseEntity.ok(shopService.getShopsOwnedByMerchant(userEntity));
     }
 
     @GetMapping("/shops/{shop-id}")

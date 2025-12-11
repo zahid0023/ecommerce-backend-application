@@ -9,10 +9,10 @@ import java.util.List;
 
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class AllShopsResponse {
+public class ShopListResponse {
     private List<ShopDTO> data;
 
-    public AllShopsResponse(List<ShopDTO> shops) {
+    public ShopListResponse(List<ShopDTO> shops) {
         this.data = shops;
     }
 }

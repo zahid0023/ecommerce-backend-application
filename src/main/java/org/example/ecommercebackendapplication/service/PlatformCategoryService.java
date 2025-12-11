@@ -17,6 +17,5 @@ public interface PlatformCategoryService {
 
     PlatformCategoryListResponse getImmediateSubCategories(Long categoryId);
 
-    PlatformCategoryResponse getPlatformCategory(Long id);
-
+    PlatformCategoryResponse getPlatformCategoryNested(Long platformCategoryId);
 }

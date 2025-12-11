@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.example.ecommercebackendapplication.dto.request.shop.ShopCreateRequest;
-import org.example.ecommercebackendapplication.dto.response.shop.AllShopsResponse;
+import org.example.ecommercebackendapplication.dto.response.shop.ShopListResponse;
 import org.example.ecommercebackendapplication.dto.response.shop.ShopCreateResponse;
 import org.example.ecommercebackendapplication.dto.response.shop.ShopResponse;
 import org.example.ecommercebackendapplication.model.dto.shop.ShopDTO;
@@ -17,8 +17,6 @@ import org.example.ecommercebackendapplication.repository.ShopOwnerRepository;
 import org.example.ecommercebackendapplication.repository.ShopRepository;
 import org.example.ecommercebackendapplication.service.ShopService;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @Slf4j
@@ -45,18 +43,25 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public AllShopsResponse getAllShops(ShopOwnerEntity shopOwnerEntity) {
-        List<ShopEntity> shopEntities = List.of();
-        List<ShopDTO> shopDTOList = shopEntities.stream()
-                .map(ShopMapper::toDTO)
-                .toList();
-        return new AllShopsResponse(shopDTOList);
+    public ShopResponse getShopById(Long shopId) {
+        ShopEntity shopEntity = getShopEntityById(shopId);
+        ShopDTO shopDTO = ShopMapper.toDTO(shopEntity);
+        return new ShopResponse(shopDTO);
     }
 
     @Override
-    public ShopResponse getShopById(Long shopId) {
-        ShopEntity shopEntity = shopRepository.findById(shopId).orElseThrow(() -> new EntityNotFoundException(""));
-        ShopDTO shopDTO = ShopMapper.toDTO(shopEntity);
-        return new ShopResponse(shopDTO);
+    public ShopListResponse getShopsOwnedByMerchant(UserEntity userEntity) {
+        return null;
+    }
+
+    @Override
+    public ShopEntity getShopEntityById(Long shopId) {
+        return shopRepository.findById(shopId)
+                .orElseThrow(() -> new EntityNotFoundException("ShopEntity Not Found!! "));
+    }
+
+    @Override
+    public Boolean isShopOwnedByMerchant(Long merchantId, Long shopId) {
+        return shopOwnerRepository.isShopOwnedByMerchant(merchantId, shopId);
     }
 }
